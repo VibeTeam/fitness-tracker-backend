@@ -1,0 +1,68 @@
+syntax = "proto3";
+
+package workout.v1;
+
+option go_package = "github.com/VibeTeam/fitness-tracker-backend/proto/workout/v1";
+
+import "google/protobuf/timestamp.proto";
+import "common/v1/common.proto";
+
+message WorkoutSession {
+  int32 id = 1;
+  int32 workout_type_id = 2;
+  int32 user_id = 3;
+  google.protobuf.Timestamp datetime = 4;
+}
+
+// A key-value storage (one record-one pair) related to certain WorkoutSession
+message WorkoutDetail {
+  int32 id = 1;
+  int32 workout_session_id = 2;
+  string detail_name = 3;
+  string detail_value = 4;
+}
+
+message AddWorkoutSessionRequest {
+  WorkoutSession session = 1;
+  // Optional list of details to add with the session.
+  repeated WorkoutDetail details = 2;
+}
+
+message AddWorkoutSessionResponse {
+  WorkoutSession session = 1;
+  repeated WorkoutDetail details = 2;
+}
+
+message ListWorkoutSessionsRequest {
+  int32 user_id = 1;
+}
+
+message ListWorkoutSessionsResponse {
+  // List of workout sessions for the user, including details.
+  repeated WorkoutSession sessions = 1;
+  // Associated details for all sessions.
+  repeated WorkoutDetail details = 2;
+}
+
+message AddMuscleGroupRequest {
+  common.v1.MuscleGroup muscle_group = 1;
+}
+
+message AddMuscleGroupResponse {
+  common.v1.MuscleGroup muscle_group = 1;
+}
+
+message AddWorkoutTypeRequest {
+  common.v1.WorkoutType workout_type = 1;
+}
+
+message AddWorkoutTypeResponse {
+  common.v1.WorkoutType workout_type = 1;
+}
+
+service WorkoutsService {
+  rpc AddWorkoutSession(AddWorkoutSessionRequest) returns (AddWorkoutSessionResponse);
+  rpc ListWorkoutSessions(ListWorkoutSessionsRequest) returns (ListWorkoutSessionsResponse);
+  rpc AddMuscleGroup(AddMuscleGroupRequest) returns (AddMuscleGroupResponse);
+  rpc AddWorkoutType(AddWorkoutTypeRequest) returns (AddWorkoutTypeResponse);
+}

@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package common.v1;
+
+option go_package = "github.com/VibeTeam/fitness-tracker-backend/proto/common/v1";
+
+message MuscleGroup {
+  int32 id = 1;
+  string name = 2;
+}
+
+message WorkoutType {
+  int32 id = 1;
+  string name = 2;
+  int32 muscle_group_id = 3;
+}

@@ -1,0 +1,61 @@
+syntax = "proto3";
+
+package user.v1;
+
+option go_package = "github.com/VibeTeam/fitness-tracker-backend/proto/user/v1";
+
+import "google/protobuf/timestamp.proto";
+
+message User {
+  int32 id = 1;
+  string email = 2;
+  string password_hash = 3;
+  google.protobuf.Timestamp created_at = 4;
+}
+
+message RegisterRequest {
+  string email = 1;
+  string password_hash = 2;
+}
+
+message RegisterResponse {
+  int32 user_id = 1;
+}
+
+message LoginRequest {
+  string email = 1;
+  string password = 2;
+}
+
+message LoginResponse {
+  // Access token for authentication.
+  string access_token = 1;
+  // Refresh token for renewing access.
+  string refresh_token = 2;
+}
+
+message RefreshTokenRequest {
+  string refresh_token = 1;
+}
+
+message RefreshTokenResponse {
+  string access_token = 1;
+  string refresh_token = 2;
+}
+
+message ValidateTokenRequest {
+  string access_token = 1;
+}
+
+message ValidateTokenResponse {
+  int32 user_id = 1;
+  // Whether the token is valid.
+  bool valid = 2;
+}
+
+service UserService {
+  rpc Register(RegisterRequest) returns (RegisterResponse);
+  rpc Login(LoginRequest) returns (LoginResponse);
+  rpc RefreshToken(RefreshTokenRequest) returns (RefreshTokenResponse);
+  rpc ValidateToken(ValidateTokenRequest) returns (ValidateTokenResponse);
+}
