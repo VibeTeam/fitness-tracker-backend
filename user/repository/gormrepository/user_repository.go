@@ -1,4 +1,4 @@
-package repository
+package gormrepository
 
 import (
 	"context"
@@ -6,14 +6,16 @@ import (
 	"gorm.io/gorm"
 
 	"github.com/VibeTeam/fitness-tracker-backend/user/models"
+	"github.com/VibeTeam/fitness-tracker-backend/user/repository"
 )
 
+// gormUserRepository implements repository.UserRepository using GORM.
 type gormUserRepository struct {
 	db *gorm.DB
 }
 
-// NewGormUserRepository creates a new user repository instance
-func NewGormUserRepository(db *gorm.DB) UserRepository {
+// NewUserRepository returns a GORM-backed User repository.
+func NewUserRepository(db *gorm.DB) repository.UserRepository {
 	return &gormUserRepository{db: db}
 }
 
