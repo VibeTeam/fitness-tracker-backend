@@ -4,6 +4,7 @@ go 1.24
 
 require (
 	github.com/golang-jwt/jwt/v5 v5.2.2
+	golang.org/x/crypto v0.40.0
 	gorm.io/gorm v1.30.0
 )
 
