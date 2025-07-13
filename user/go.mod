@@ -2,7 +2,10 @@ module github.com/VibeTeam/fitness-tracker-backend/user
 
 go 1.24
 
-require gorm.io/gorm v1.30.0
+require (
+	github.com/golang-jwt/jwt/v5 v5.2.2
+	gorm.io/gorm v1.30.0
+)
 
 require (
 	github.com/jinzhu/inflection v1.0.0 // indirect
