@@ -1,79 +1,47 @@
-version: "3.9"
+version: "3.8"
 
 services:
+  # PostgreSQL database
   db:
-    image: postgres:17.1
+    image: postgres:16-alpine
+    restart: unless-stopped
     environment:
-      POSTGRES_USER: fitness
-      POSTGRES_PASSWORD: fitness
-      POSTGRES_DB: fitness
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: fitness_tracker
     volumes:
-      - "postgres:/var/lib/postgresql/data"
-    networks:
-      - backend
+      - db-data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
-    healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U $$POSTGRES_USER" ]
-      interval: 10s
-      retries: 5
-      start_period: 5s
 
+  # Ollama LLM server
   ollama:
     image: ollama/ollama:latest
+    restart: unless-stopped
     volumes:
-      - "ollama:/root/ollama"
-    networks:
-      - backend
-    entrypoint: [ "/bin/sh", "-c", "ollama pull gemma3:1b-it-qat && ollama serve" ]
-    healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:11434" ]
-      interval: 30s
-      retries: 5
-      start_period: 10s
-
-  user-service:
-    build:
-      context: ./user
-      dockerfile: Dockerfile
-    depends_on:
-      db:
-        condition: service_healthy
-    networks:
-      - backend
+      - ollama-data:/root/.ollama
     ports:
-      - "50051:50051"
+      - "11434:11434" # default Ollama port
 
-  workout-service:
+  # Go API service
+  api:
     build:
-      context: ./workout
+      context: .
       dockerfile: Dockerfile
+    restart: unless-stopped
     depends_on:
-      db:
-        condition: service_healthy
-    networks:
-      - backend
+      - db
+      - ollama
+    environment:
+      # Web server port inside container
+      PORT: 8080
+      # Database connection string (internal host names)
+      DATABASE_URL: postgres://postgres:postgres@db:5432/fitness_tracker?sslmode=disable
+      # Example: base URL to reach Ollama service from API
+      OLLAMA_BASE_URL: http://ollama:11434
     ports:
-      - "50052:50052"
-
-  llm-service:
-    build:
-      context: ./llm
-      dockerfile: Dockerfile
-    depends_on:
-      db:
-        condition: service_healthy
-      ollama:
-        condition: service_healthy
-    networks:
-      - backend
-    ports:
-      - "50053:50053"
-
-networks:
-  backend:
-    driver: bridge
+      - "8080:8080"
 
 volumes:
-  postgres:
-  ollama:
+  db-data:
+  ollama-data:
