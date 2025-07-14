@@ -4,6 +4,7 @@ go 1.24
 
 require (
 	github.com/VibeTeam/fitness-tracker-backend/user v0.0.0-00010101000000-000000000000
+	github.com/VibeTeam/fitness-tracker-backend/workout v0.0.0-00010101000000-000000000000
 	github.com/gin-gonic/gin v1.10.1
 	github.com/swaggo/files v1.0.1
 	github.com/swaggo/gin-swagger v1.6.0
@@ -58,5 +59,6 @@ require (
 
 replace github.com/VibeTeam/fitness-tracker-backend/user => ./user
 replace github.com/VibeTeam/fitness-tracker-backend/shared => ./shared
+replace github.com/VibeTeam/fitness-tracker-backend/workout => ./workout
 
 require github.com/VibeTeam/fitness-tracker-backend/shared v0.0.0-00010101000000-000000000000

@@ -45,6 +45,32 @@ definitions:
       password:
         type: string
     type: object
+  fitness-tracker-backend_workout_handler.muscleGroupRequest:
+    properties:
+      name:
+        type: string
+    required:
+      - name
+    type: object
+  fitness-tracker-backend_workout_handler.workoutSessionRequest:
+    properties:
+      datetime:
+        type: string
+      workout_type_id:
+        type: integer
+    required:
+      - workout_type_id
+    type: object
+  fitness-tracker-backend_workout_handler.workoutTypeRequest:
+    properties:
+      muscle_group_id:
+        type: integer
+      name:
+        type: string
+    required:
+      - muscle_group_id
+      - name
+    type: object
   gin.H:
     additionalProperties: { }
     type: object
@@ -59,6 +85,56 @@ definitions:
       name:
         type: string
       passwordHash:
+        type: string
+    type: object
+  github_com_VibeTeam_fitness-tracker-backend_workout_models.MuscleGroup:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+  github_com_VibeTeam_fitness-tracker-backend_workout_models.WorkoutDetail:
+    properties:
+      detailName:
+        type: string
+      detailValue:
+        type: string
+      id:
+        type: integer
+      workoutSessionID:
+        type: integer
+    type: object
+  github_com_VibeTeam_fitness-tracker-backend_workout_models.WorkoutSession:
+    properties:
+      datetime:
+        type: string
+      details:
+        items:
+          $ref: '#/definitions/github_com_VibeTeam_fitness-tracker-backend_workout_models.WorkoutDetail'
+        type: array
+      id:
+        type: integer
+      userID:
+        type: integer
+      workoutType:
+        allOf:
+          - $ref: '#/definitions/github_com_VibeTeam_fitness-tracker-backend_workout_models.WorkoutType'
+        description: Associations
+      workoutTypeID:
+        type: integer
+    type: object
+  github_com_VibeTeam_fitness-tracker-backend_workout_models.WorkoutType:
+    properties:
+      id:
+        type: integer
+      muscleGroup:
+        allOf:
+          - $ref: '#/definitions/github_com_VibeTeam_fitness-tracker-backend_workout_models.MuscleGroup'
+        description: Associations
+      muscleGroupID:
+        type: integer
+      name:
         type: string
     type: object
 info:
@@ -139,6 +215,136 @@ paths:
       summary: Refresh JWT tokens
       tags:
         - auth
+  /muscle-groups:
+    get:
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/github_com_VibeTeam_fitness-tracker-backend_workout_models.MuscleGroup'
+            type: array
+      security:
+        - BearerAuth: [ ]
+      summary: List muscle groups
+      tags:
+        - muscle-groups
+    post:
+      consumes:
+        - application/json
+      parameters:
+        - description: Muscle group
+          in: body
+          name: payload
+          required: true
+          schema:
+            $ref: '#/definitions/fitness-tracker-backend_workout_handler.muscleGroupRequest'
+      produces:
+        - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/github_com_VibeTeam_fitness-tracker-backend_workout_models.MuscleGroup'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.H'
+      security:
+        - BearerAuth: [ ]
+      summary: Create muscle group
+      tags:
+        - muscle-groups
+  /muscle-groups/{id}:
+    delete:
+      parameters:
+        - description: MuscleGroup ID
+          in: path
+          name: id
+          required: true
+          type: integer
+      responses:
+        "204":
+          description: No Content
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+      security:
+        - BearerAuth: [ ]
+      summary: Delete muscle group
+      tags:
+        - muscle-groups
+    get:
+      parameters:
+        - description: MuscleGroup ID
+          in: path
+          name: id
+          required: true
+          type: integer
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_VibeTeam_fitness-tracker-backend_workout_models.MuscleGroup'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/gin.H'
+      security:
+        - BearerAuth: [ ]
+      summary: Get muscle group by ID
+      tags:
+        - muscle-groups
+    put:
+      consumes:
+        - application/json
+      parameters:
+        - description: MuscleGroup ID
+          in: path
+          name: id
+          required: true
+          type: integer
+        - description: Update
+          in: body
+          name: payload
+          required: true
+          schema:
+            $ref: '#/definitions/fitness-tracker-backend_workout_handler.muscleGroupRequest'
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_VibeTeam_fitness-tracker-backend_workout_models.MuscleGroup'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/gin.H'
+      security:
+        - BearerAuth: [ ]
+      summary: Update muscle group
+      tags:
+        - muscle-groups
   /users:
     get:
       parameters:
@@ -289,6 +495,240 @@ paths:
       summary: Update user
       tags:
         - users
+  /workout-sessions:
+    get:
+      parameters:
+        - description: Limit
+          in: query
+          name: limit
+          type: integer
+        - description: Offset
+          in: query
+          name: offset
+          type: integer
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/github_com_VibeTeam_fitness-tracker-backend_workout_models.WorkoutSession'
+            type: array
+      security:
+        - BearerAuth: [ ]
+      summary: List workout sessions for user
+      tags:
+        - workout-sessions
+    post:
+      consumes:
+        - application/json
+      parameters:
+        - description: Session
+          in: body
+          name: payload
+          required: true
+          schema:
+            $ref: '#/definitions/fitness-tracker-backend_workout_handler.workoutSessionRequest'
+      produces:
+        - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/github_com_VibeTeam_fitness-tracker-backend_workout_models.WorkoutSession'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.H'
+      security:
+        - BearerAuth: [ ]
+      summary: Create workout session
+      tags:
+        - workout-sessions
+  /workout-sessions/{id}:
+    delete:
+      parameters:
+        - description: WorkoutSession ID
+          in: path
+          name: id
+          required: true
+          type: integer
+      responses:
+        "204":
+          description: No Content
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+      security:
+        - BearerAuth: [ ]
+      summary: Delete workout session
+      tags:
+        - workout-sessions
+    get:
+      parameters:
+        - description: WorkoutSession ID
+          in: path
+          name: id
+          required: true
+          type: integer
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_VibeTeam_fitness-tracker-backend_workout_models.WorkoutSession'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/gin.H'
+      security:
+        - BearerAuth: [ ]
+      summary: Get workout session by ID
+      tags:
+        - workout-sessions
+  /workout-types:
+    get:
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/github_com_VibeTeam_fitness-tracker-backend_workout_models.WorkoutType'
+            type: array
+      security:
+        - BearerAuth: [ ]
+      summary: List workout types
+      tags:
+        - workout-types
+    post:
+      consumes:
+        - application/json
+      parameters:
+        - description: Workout type
+          in: body
+          name: payload
+          required: true
+          schema:
+            $ref: '#/definitions/fitness-tracker-backend_workout_handler.workoutTypeRequest'
+      produces:
+        - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/github_com_VibeTeam_fitness-tracker-backend_workout_models.WorkoutType'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.H'
+      security:
+        - BearerAuth: [ ]
+      summary: Create workout type
+      tags:
+        - workout-types
+  /workout-types/{id}:
+    delete:
+      parameters:
+        - description: WorkoutType ID
+          in: path
+          name: id
+          required: true
+          type: integer
+      responses:
+        "204":
+          description: No Content
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+      security:
+        - BearerAuth: [ ]
+      summary: Delete workout type
+      tags:
+        - workout-types
+    get:
+      parameters:
+        - description: WorkoutType ID
+          in: path
+          name: id
+          required: true
+          type: integer
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_VibeTeam_fitness-tracker-backend_workout_models.WorkoutType'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/gin.H'
+      security:
+        - BearerAuth: [ ]
+      summary: Get workout type by ID
+      tags:
+        - workout-types
+    put:
+      consumes:
+        - application/json
+      parameters:
+        - description: WorkoutType ID
+          in: path
+          name: id
+          required: true
+          type: integer
+        - description: Update
+          in: body
+          name: payload
+          required: true
+          schema:
+            $ref: '#/definitions/fitness-tracker-backend_workout_handler.workoutTypeRequest'
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_VibeTeam_fitness-tracker-backend_workout_models.WorkoutType'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/gin.H'
+      security:
+        - BearerAuth: [ ]
+      summary: Update workout type
+      tags:
+        - workout-types
 securityDefinitions:
   BearerAuth:
     description: 'Provide your JWT with the "Bearer " prefix. Example: "Bearer {token}".'

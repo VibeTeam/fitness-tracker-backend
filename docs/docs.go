@@ -128,6 +128,215 @@ const docTemplate = `{
                 }
             }
         },
+        "/muscle-groups": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "muscle-groups"
+                ],
+                "summary": "List muscle groups",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/github_com_VibeTeam_fitness-tracker-backend_workout_models.MuscleGroup"
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "muscle-groups"
+                ],
+                "summary": "Create muscle group",
+                "parameters": [
+                    {
+                        "description": "Muscle group",
+                        "name": "payload",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/fitness-tracker-backend_workout_handler.muscleGroupRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_VibeTeam_fitness-tracker-backend_workout_models.MuscleGroup"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    }
+                }
+            }
+        },
+        "/muscle-groups/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "muscle-groups"
+                ],
+                "summary": "Get muscle group by ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "MuscleGroup ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_VibeTeam_fitness-tracker-backend_workout_models.MuscleGroup"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "muscle-groups"
+                ],
+                "summary": "Update muscle group",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "MuscleGroup ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Update",
+                        "name": "payload",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/fitness-tracker-backend_workout_handler.muscleGroupRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_VibeTeam_fitness-tracker-backend_workout_models.MuscleGroup"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "muscle-groups"
+                ],
+                "summary": "Delete muscle group",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "MuscleGroup ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    }
+                }
+            }
+        },
         "/users": {
             "get": {
                 "security": [
@@ -364,6 +573,383 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/workout-sessions": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "workout-sessions"
+                ],
+                "summary": "List workout sessions for user",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Limit",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Offset",
+                        "name": "offset",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/github_com_VibeTeam_fitness-tracker-backend_workout_models.WorkoutSession"
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "workout-sessions"
+                ],
+                "summary": "Create workout session",
+                "parameters": [
+                    {
+                        "description": "Session",
+                        "name": "payload",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/fitness-tracker-backend_workout_handler.workoutSessionRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_VibeTeam_fitness-tracker-backend_workout_models.WorkoutSession"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    }
+                }
+            }
+        },
+        "/workout-sessions/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "workout-sessions"
+                ],
+                "summary": "Get workout session by ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "WorkoutSession ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_VibeTeam_fitness-tracker-backend_workout_models.WorkoutSession"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "workout-sessions"
+                ],
+                "summary": "Delete workout session",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "WorkoutSession ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    }
+                }
+            }
+        },
+        "/workout-types": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "workout-types"
+                ],
+                "summary": "List workout types",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/github_com_VibeTeam_fitness-tracker-backend_workout_models.WorkoutType"
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "workout-types"
+                ],
+                "summary": "Create workout type",
+                "parameters": [
+                    {
+                        "description": "Workout type",
+                        "name": "payload",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/fitness-tracker-backend_workout_handler.workoutTypeRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_VibeTeam_fitness-tracker-backend_workout_models.WorkoutType"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    }
+                }
+            }
+        },
+        "/workout-types/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "workout-types"
+                ],
+                "summary": "Get workout type by ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "WorkoutType ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_VibeTeam_fitness-tracker-backend_workout_models.WorkoutType"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "workout-types"
+                ],
+                "summary": "Update workout type",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "WorkoutType ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Update",
+                        "name": "payload",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/fitness-tracker-backend_workout_handler.workoutTypeRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_VibeTeam_fitness-tracker-backend_workout_models.WorkoutType"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "workout-types"
+                ],
+                "summary": "Delete workout type",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "WorkoutType ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -437,6 +1023,46 @@ const docTemplate = `{
                 }
             }
         },
+        "fitness-tracker-backend_workout_handler.muscleGroupRequest": {
+            "type": "object",
+            "required": [
+                "name"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "fitness-tracker-backend_workout_handler.workoutSessionRequest": {
+            "type": "object",
+            "required": [
+                "workout_type_id"
+            ],
+            "properties": {
+                "datetime": {
+                    "type": "string"
+                },
+                "workout_type_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "fitness-tracker-backend_workout_handler.workoutTypeRequest": {
+            "type": "object",
+            "required": [
+                "muscle_group_id",
+                "name"
+            ],
+            "properties": {
+                "muscle_group_id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
         "gin.H": {
             "type": "object",
             "additionalProperties": {}
@@ -457,6 +1083,87 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "passwordHash": {
+                    "type": "string"
+                }
+            }
+        },
+        "github_com_VibeTeam_fitness-tracker-backend_workout_models.MuscleGroup": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "github_com_VibeTeam_fitness-tracker-backend_workout_models.WorkoutDetail": {
+            "type": "object",
+            "properties": {
+                "detailName": {
+                    "type": "string"
+                },
+                "detailValue": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "workoutSessionID": {
+                    "type": "integer"
+                }
+            }
+        },
+        "github_com_VibeTeam_fitness-tracker-backend_workout_models.WorkoutSession": {
+            "type": "object",
+            "properties": {
+                "datetime": {
+                    "type": "string"
+                },
+                "details": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/github_com_VibeTeam_fitness-tracker-backend_workout_models.WorkoutDetail"
+                    }
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "userID": {
+                    "type": "integer"
+                },
+                "workoutType": {
+                    "description": "Associations",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/github_com_VibeTeam_fitness-tracker-backend_workout_models.WorkoutType"
+                        }
+                    ]
+                },
+                "workoutTypeID": {
+                    "type": "integer"
+                }
+            }
+        },
+        "github_com_VibeTeam_fitness-tracker-backend_workout_models.WorkoutType": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "muscleGroup": {
+                    "description": "Associations",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/github_com_VibeTeam_fitness-tracker-backend_workout_models.MuscleGroup"
+                        }
+                    ]
+                },
+                "muscleGroupID": {
+                    "type": "integer"
+                },
+                "name": {
                     "type": "string"
                 }
             }
