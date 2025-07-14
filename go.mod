@@ -57,3 +57,6 @@ require (
 )
 
 replace github.com/VibeTeam/fitness-tracker-backend/user => ./user
+replace github.com/VibeTeam/fitness-tracker-backend/shared => ./shared
+
+require github.com/VibeTeam/fitness-tracker-backend/shared v0.0.0-00010101000000-000000000000

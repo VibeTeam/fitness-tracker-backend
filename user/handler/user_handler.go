@@ -22,14 +22,18 @@ func New(repo repository.UserRepository) *UserHandler {
 }
 
 // RegisterRoutes attaches user CRUD endpoints to the supplied Gin router.
-func (h *UserHandler) RegisterRoutes(r *gin.Engine) {
+func (h *UserHandler) RegisterRoutes(r *gin.Engine, authMiddleware gin.HandlerFunc) {
+	// Public route: user registration
+	r.POST("/users", h.create)
+
+	// Protected routes: require valid access token
 	users := r.Group("/users")
+	users.Use(authMiddleware)
 	{
-		users.POST("", h.create)
 		users.GET("", h.list)
-		users.GET(":id", h.getByID)
-		users.PUT(":id", h.update)
-		users.DELETE(":id", h.delete)
+		users.GET("/:id", h.getByID)
+		users.PUT("/:id", h.update)
+		users.DELETE("/:id", h.delete)
 	}
 }
 
@@ -92,6 +96,7 @@ func (h *UserHandler) create(c *gin.Context) {
 // @Success      200     {array}   models.User
 // @Failure      500     {object}  gin.H
 // @Router       /users [get]
+// @Security     BearerAuth
 func (h *UserHandler) list(c *gin.Context) {
 	limit, _ := strconv.Atoi(c.DefaultQuery("limit", "100"))
 	offset, _ := strconv.Atoi(c.DefaultQuery("offset", "0"))
@@ -119,6 +124,7 @@ func (h *UserHandler) list(c *gin.Context) {
 // @Failure      400  {object}  gin.H
 // @Failure      404  {object}  gin.H
 // @Router       /users/{id} [get]
+// @Security     BearerAuth
 func (h *UserHandler) getByID(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
@@ -145,6 +151,7 @@ func (h *UserHandler) getByID(c *gin.Context) {
 // @Failure      404      {object}  gin.H
 // @Failure      500      {object}  gin.H
 // @Router       /users/{id} [put]
+// @Security     BearerAuth
 func (h *UserHandler) update(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
@@ -194,6 +201,7 @@ func (h *UserHandler) update(c *gin.Context) {
 // @Failure      400  {object}  gin.H
 // @Failure      500  {object}  gin.H
 // @Router       /users/{id} [delete]
+// @Security     BearerAuth
 func (h *UserHandler) delete(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
