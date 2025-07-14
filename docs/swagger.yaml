@@ -62,6 +62,16 @@ definitions:
       suggestion:
         type: string
     type: object
+  fitness-tracker-backend_workout_handler.workoutDetailRequest:
+    properties:
+      name:
+        type: string
+      value:
+        type: string
+    required:
+      - name
+      - value
+    type: object
   fitness-tracker-backend_workout_handler.workoutSessionRequest:
     properties:
       datetime:
@@ -625,6 +635,46 @@ paths:
       security:
         - BearerAuth: [ ]
       summary: Get workout session by ID
+      tags:
+        - workout-sessions
+  /workout-sessions/{id}/details:
+    post:
+      consumes:
+        - application/json
+      parameters:
+        - description: WorkoutSession ID
+          in: path
+          name: id
+          required: true
+          type: integer
+        - description: Detail
+          in: body
+          name: payload
+          required: true
+          schema:
+            $ref: '#/definitions/fitness-tracker-backend_workout_handler.workoutDetailRequest'
+      produces:
+        - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/github_com_VibeTeam_fitness-tracker-backend_workout_models.WorkoutDetail'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.H'
+      security:
+        - BearerAuth: [ ]
+      summary: Add detail to workout session
       tags:
         - workout-sessions
   /workout-types:

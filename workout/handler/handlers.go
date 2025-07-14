@@ -334,12 +334,19 @@ func (h *WorkoutSessionHandler) RegisterRoutes(r *gin.Engine, auth gin.HandlerFu
 		ws.GET("", h.list)
 		ws.GET("/:id", h.getByID)
 		ws.DELETE("/:id", h.delete)
+		ws.POST("/:id/details", h.addDetail)
 	}
 }
 
 type workoutSessionRequest struct {
 	WorkoutTypeID uint      `json:"workout_type_id" binding:"required"`
 	Datetime      time.Time `json:"datetime"`
+}
+
+// detail request DTO
+type workoutDetailRequest struct {
+	Name  string `json:"name" binding:"required"`
+	Value string `json:"value" binding:"required"`
 }
 
 // create session
@@ -373,6 +380,57 @@ func (h *WorkoutSessionHandler) create(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusCreated, session)
+}
+
+// add detail
+// @Summary      Add detail to workout session
+// @Tags         workout-sessions
+// @Security     BearerAuth
+// @Accept       json
+// @Produce      json
+// @Param        id       path      int                  true  "WorkoutSession ID"
+// @Param        payload  body      workoutDetailRequest true  "Detail"
+// @Success      201      {object}  models.WorkoutDetail
+// @Failure      400      {object}  gin.H
+// @Failure      404      {object}  gin.H
+// @Failure      500      {object}  gin.H
+// @Router       /workout-sessions/{id}/details [post]
+func (h *WorkoutSessionHandler) addDetail(c *gin.Context) {
+	// parse session ID
+	sid, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid id"})
+		return
+	}
+
+	// load session and verify ownership
+	session, err := h.repo.GetByID(c.Request.Context(), uint(sid))
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
+		return
+	}
+	uid, _ := middleware.UserID(c)
+	if session.UserID != uid {
+		c.JSON(http.StatusNotFound, gin.H{"error": "not found"})
+		return
+	}
+
+	var req workoutDetailRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	detail := &models.WorkoutDetail{
+		WorkoutSessionID: session.ID,
+		DetailName:       req.Name,
+		DetailValue:      req.Value,
+	}
+	if err := h.detailRepo.Create(c.Request.Context(), detail); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusCreated, detail)
 }
 
 // list sessions for user

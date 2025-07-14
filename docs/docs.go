@@ -772,6 +772,69 @@ const docTemplate = `{
                 }
             }
         },
+        "/workout-sessions/{id}/details": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "workout-sessions"
+                ],
+                "summary": "Add detail to workout session",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "WorkoutSession ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Detail",
+                        "name": "payload",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/fitness-tracker-backend_workout_handler.workoutDetailRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_VibeTeam_fitness-tracker-backend_workout_models.WorkoutDetail"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    }
+                }
+            }
+        },
         "/workout-types": {
             "get": {
                 "security": [
@@ -1076,6 +1139,21 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "suggestion": {
+                    "type": "string"
+                }
+            }
+        },
+        "fitness-tracker-backend_workout_handler.workoutDetailRequest": {
+            "type": "object",
+            "required": [
+                "name",
+                "value"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "value": {
                     "type": "string"
                 }
             }

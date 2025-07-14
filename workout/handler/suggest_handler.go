@@ -62,8 +62,16 @@ func (h *SuggestHandler) suggest(c *gin.Context) {
 		return
 	}
 	var parts []string
-	for _, s := range sessions {
-		parts = append(parts, "Session "+strconv.Itoa(int(s.ID))+": "+s.WorkoutType.Name)
+	for idx, s := range sessions {
+		line := "Session " + strconv.Itoa(idx+1) + ": " + s.WorkoutType.Name
+		if len(s.Details) > 0 {
+			var dParts []string
+			for _, d := range s.Details {
+				dParts = append(dParts, d.DetailName+"="+d.DetailValue)
+			}
+			line += " (" + strings.Join(dParts, ", ") + ")"
+		}
+		parts = append(parts, line)
 	}
 	history := strings.Join(parts, "\n")
 	suggestion, err := h.suggester.Suggest(history)
