@@ -6,6 +6,7 @@ option go_package = "github.com/VibeTeam/fitness-tracker-backend/proto/workout/v
 
 import "google/protobuf/timestamp.proto";
 import "common/v1/common.proto";
+import "google/api/annotations.proto";
 
 message WorkoutSession {
   int32 id = 1;
@@ -61,8 +62,27 @@ message AddWorkoutTypeResponse {
 }
 
 service WorkoutsService {
-  rpc AddWorkoutSession(AddWorkoutSessionRequest) returns (AddWorkoutSessionResponse);
-  rpc ListWorkoutSessions(ListWorkoutSessionsRequest) returns (ListWorkoutSessionsResponse);
-  rpc AddMuscleGroup(AddMuscleGroupRequest) returns (AddMuscleGroupResponse);
-  rpc AddWorkoutType(AddWorkoutTypeRequest) returns (AddWorkoutTypeResponse);
+  rpc AddWorkoutSession(AddWorkoutSessionRequest) returns (AddWorkoutSessionResponse) {
+    option (google.api.http) = {
+      post: "/v1/workouts/sessions"
+      body: "*"
+    };
+  }
+  rpc ListWorkoutSessions(ListWorkoutSessionsRequest) returns (ListWorkoutSessionsResponse) {
+    option (google.api.http) = {
+      get: "/v1/workouts/users/{user_id}/sessions"
+    };
+  }
+  rpc AddMuscleGroup(AddMuscleGroupRequest) returns (AddMuscleGroupResponse) {
+    option (google.api.http) = {
+      post: "/v1/workouts/muscle-groups"
+      body: "*"
+    };
+  }
+  rpc AddWorkoutType(AddWorkoutTypeRequest) returns (AddWorkoutTypeResponse) {
+    option (google.api.http) = {
+      post: "/v1/workouts/workout-types"
+      body: "*"
+    };
+  }
 }

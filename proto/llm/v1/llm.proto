@@ -7,6 +7,7 @@ option go_package = "github.com/VibeTeam/fitness-tracker-backend/proto/llm/v1";
 import "google/protobuf/timestamp.proto";
 import "common/v1/common.proto";
 import "workout/v1/workout.proto";
+import "google/api/annotations.proto";
 
 message WorkoutSessionSummary {
   common.v1.WorkoutType type = 1;
@@ -30,5 +31,10 @@ message SuggestWorkoutResponse {
 }
 
 service LLMService {
-  rpc SuggestWorkout(SuggestWorkoutRequest) returns (SuggestWorkoutResponse);
+  rpc SuggestWorkout(SuggestWorkoutRequest) returns (SuggestWorkoutResponse) {
+    option (google.api.http) = {
+      post: "/v1/llm/suggest-workout"
+      body: "*"
+    };
+  }
 }

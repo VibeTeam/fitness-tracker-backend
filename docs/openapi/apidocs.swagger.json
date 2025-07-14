@@ -1,0 +1,637 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "common/v1/common.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "WorkoutsService"
+    },
+    {
+      "name": "LLMService"
+    },
+    {
+      "name": "UserService"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/v1/llm/suggest-workout": {
+      "post": {
+        "operationId": "LLMService_SuggestWorkout",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1SuggestWorkoutResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1SuggestWorkoutRequest"
+            }
+          }
+        ],
+        "tags": [
+          "LLMService"
+        ]
+      }
+    },
+    "/v1/users/login": {
+      "post": {
+        "operationId": "UserService_Login",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1LoginResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1LoginRequest"
+            }
+          }
+        ],
+        "tags": [
+          "UserService"
+        ]
+      }
+    },
+    "/v1/users/refresh-token": {
+      "post": {
+        "operationId": "UserService_RefreshToken",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1RefreshTokenResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1RefreshTokenRequest"
+            }
+          }
+        ],
+        "tags": [
+          "UserService"
+        ]
+      }
+    },
+    "/v1/users/register": {
+      "post": {
+        "operationId": "UserService_Register",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1RegisterResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1RegisterRequest"
+            }
+          }
+        ],
+        "tags": [
+          "UserService"
+        ]
+      }
+    },
+    "/v1/users/validate-token": {
+      "post": {
+        "operationId": "UserService_ValidateToken",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ValidateTokenResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1ValidateTokenRequest"
+            }
+          }
+        ],
+        "tags": [
+          "UserService"
+        ]
+      }
+    },
+    "/v1/workouts/muscle-groups": {
+      "post": {
+        "operationId": "WorkoutsService_AddMuscleGroup",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1AddMuscleGroupResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1AddMuscleGroupRequest"
+            }
+          }
+        ],
+        "tags": [
+          "WorkoutsService"
+        ]
+      }
+    },
+    "/v1/workouts/sessions": {
+      "post": {
+        "operationId": "WorkoutsService_AddWorkoutSession",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1AddWorkoutSessionResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1AddWorkoutSessionRequest"
+            }
+          }
+        ],
+        "tags": [
+          "WorkoutsService"
+        ]
+      }
+    },
+    "/v1/workouts/users/{userId}/sessions": {
+      "get": {
+        "operationId": "WorkoutsService_ListWorkoutSessions",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListWorkoutSessionsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "tags": [
+          "WorkoutsService"
+        ]
+      }
+    },
+    "/v1/workouts/workout-types": {
+      "post": {
+        "operationId": "WorkoutsService_AddWorkoutType",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1AddWorkoutTypeResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1AddWorkoutTypeRequest"
+            }
+          }
+        ],
+        "tags": [
+          "WorkoutsService"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {}
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    },
+    "v1AddMuscleGroupRequest": {
+      "type": "object",
+      "properties": {
+        "muscleGroup": {
+          "$ref": "#/definitions/v1MuscleGroup"
+        }
+      }
+    },
+    "v1AddMuscleGroupResponse": {
+      "type": "object",
+      "properties": {
+        "muscleGroup": {
+          "$ref": "#/definitions/v1MuscleGroup"
+        }
+      }
+    },
+    "v1AddWorkoutSessionRequest": {
+      "type": "object",
+      "properties": {
+        "session": {
+          "$ref": "#/definitions/v1WorkoutSession"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1WorkoutDetail"
+          },
+          "description": "Optional list of details to add with the session."
+        }
+      }
+    },
+    "v1AddWorkoutSessionResponse": {
+      "type": "object",
+      "properties": {
+        "session": {
+          "$ref": "#/definitions/v1WorkoutSession"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1WorkoutDetail"
+          }
+        }
+      }
+    },
+    "v1AddWorkoutTypeRequest": {
+      "type": "object",
+      "properties": {
+        "workoutType": {
+          "$ref": "#/definitions/v1WorkoutType"
+        }
+      }
+    },
+    "v1AddWorkoutTypeResponse": {
+      "type": "object",
+      "properties": {
+        "workoutType": {
+          "$ref": "#/definitions/v1WorkoutType"
+        }
+      }
+    },
+    "v1ListWorkoutSessionsResponse": {
+      "type": "object",
+      "properties": {
+        "sessions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1WorkoutSession"
+          },
+          "description": "List of workout sessions for the user, including details."
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1WorkoutDetail"
+          },
+          "description": "Associated details for all sessions."
+        }
+      }
+    },
+    "v1LoginRequest": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      }
+    },
+    "v1LoginResponse": {
+      "type": "object",
+      "properties": {
+        "accessToken": {
+          "type": "string",
+          "description": "Access token for authentication."
+        },
+        "refreshToken": {
+          "type": "string",
+          "description": "Refresh token for renewing access."
+        }
+      }
+    },
+    "v1MuscleGroup": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "v1RefreshTokenRequest": {
+      "type": "object",
+      "properties": {
+        "refreshToken": {
+          "type": "string"
+        }
+      }
+    },
+    "v1RefreshTokenResponse": {
+      "type": "object",
+      "properties": {
+        "accessToken": {
+          "type": "string"
+        },
+        "refreshToken": {
+          "type": "string"
+        }
+      }
+    },
+    "v1RegisterRequest": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "passwordHash": {
+          "type": "string"
+        }
+      }
+    },
+    "v1RegisterResponse": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "v1SuggestWorkoutRequest": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "history": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1WorkoutSessionSummary"
+          },
+          "description": "List of past workout session summaries."
+        }
+      }
+    },
+    "v1SuggestWorkoutResponse": {
+      "type": "object",
+      "properties": {
+        "suggestedType": {
+          "$ref": "#/definitions/v1WorkoutType",
+          "description": "Suggested workout type (ID and details)."
+        },
+        "suggestedDetails": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1WorkoutDetail"
+          }
+        },
+        "rationale": {
+          "type": "string",
+          "description": "Explanation for the suggestion, possibly referencing muscle groups."
+        }
+      }
+    },
+    "v1ValidateTokenRequest": {
+      "type": "object",
+      "properties": {
+        "accessToken": {
+          "type": "string"
+        }
+      }
+    },
+    "v1ValidateTokenResponse": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "valid": {
+          "type": "boolean",
+          "description": "Whether the token is valid."
+        }
+      }
+    },
+    "v1WorkoutDetail": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "workoutSessionId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "detailName": {
+          "type": "string"
+        },
+        "detailValue": {
+          "type": "string"
+        }
+      },
+      "title": "A key-value storage (one record-one pair) related to certain WorkoutSession"
+    },
+    "v1WorkoutSession": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "workoutTypeId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "userId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "datetime": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "v1WorkoutSessionSummary": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "$ref": "#/definitions/v1WorkoutType"
+        },
+        "datetime": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1WorkoutDetail"
+          },
+          "description": "Key-value details (e.g., reps, weight)."
+        }
+      }
+    },
+    "v1WorkoutType": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "name": {
+          "type": "string"
+        },
+        "muscleGroupId": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    }
+  }
+}

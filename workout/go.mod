@@ -9,3 +9,7 @@ require (
 	github.com/jinzhu/now v1.1.5 // indirect
 	golang.org/x/text v0.27.0 // indirect
 )
+
+replace github.com/VibeTeam/fitness-tracker-backend/shared => ../shared
+
+replace github.com/VibeTeam/fitness-tracker-backend/proto => ../proto
