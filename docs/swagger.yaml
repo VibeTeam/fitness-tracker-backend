@@ -45,12 +45,22 @@ definitions:
       password:
         type: string
     type: object
+  fitness-tracker-backend_workout_handler.errorResponse:
+    properties:
+      error:
+        type: string
+    type: object
   fitness-tracker-backend_workout_handler.muscleGroupRequest:
     properties:
       name:
         type: string
     required:
       - name
+    type: object
+  fitness-tracker-backend_workout_handler.suggestionResponse:
+    properties:
+      suggestion:
+        type: string
     type: object
   fitness-tracker-backend_workout_handler.workoutSessionRequest:
     properties:
@@ -345,6 +355,24 @@ paths:
       summary: Update muscle group
       tags:
         - muscle-groups
+  /suggest-workout:
+    get:
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/fitness-tracker-backend_workout_handler.suggestionResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/fitness-tracker-backend_workout_handler.errorResponse'
+      security:
+        - BearerAuth: [ ]
+      summary: Suggest next workout
+      tags:
+        - workout-suggestions
   /users:
     get:
       parameters:

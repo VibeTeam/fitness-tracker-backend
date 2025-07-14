@@ -337,6 +337,36 @@ const docTemplate = `{
                 }
             }
         },
+        "/suggest-workout": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "workout-suggestions"
+                ],
+                "summary": "Suggest next workout",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/fitness-tracker-backend_workout_handler.suggestionResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/fitness-tracker-backend_workout_handler.errorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/users": {
             "get": {
                 "security": [
@@ -1023,6 +1053,14 @@ const docTemplate = `{
                 }
             }
         },
+        "fitness-tracker-backend_workout_handler.errorResponse": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string"
+                }
+            }
+        },
         "fitness-tracker-backend_workout_handler.muscleGroupRequest": {
             "type": "object",
             "required": [
@@ -1030,6 +1068,14 @@ const docTemplate = `{
             ],
             "properties": {
                 "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "fitness-tracker-backend_workout_handler.suggestionResponse": {
+            "type": "object",
+            "properties": {
+                "suggestion": {
                     "type": "string"
                 }
             }

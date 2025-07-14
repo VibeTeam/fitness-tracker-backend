@@ -210,8 +210,10 @@ func (h *WorkoutTypeHandler) create(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	// preload muscle group
-	wt.MuscleGroup = &models.MuscleGroup{ID: req.MuscleGroupID}
+	// Retrieve with association to include muscle group name
+	if loaded, err := h.repo.GetByID(c.Request.Context(), wt.ID); err == nil {
+		wt = loaded
+	}
 	c.JSON(http.StatusCreated, wt)
 }
 

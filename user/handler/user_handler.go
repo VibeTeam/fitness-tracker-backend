@@ -25,12 +25,12 @@ func New(repo repository.UserRepository) *UserHandler {
 func (h *UserHandler) RegisterRoutes(r *gin.Engine, authMiddleware gin.HandlerFunc) {
 	// Public route: user registration
 	r.POST("/users", h.create)
+	r.GET("/users", h.list)
 
 	// Protected routes: require valid access token
 	users := r.Group("/users")
 	users.Use(authMiddleware)
 	{
-		users.GET("", h.list)
 		users.GET("/:id", h.getByID)
 		users.PUT("/:id", h.update)
 		users.DELETE("/:id", h.delete)
