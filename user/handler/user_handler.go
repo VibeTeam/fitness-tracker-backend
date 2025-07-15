@@ -7,6 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
 
+	"github.com/VibeTeam/fitness-tracker-backend/shared/middleware"
 	"github.com/VibeTeam/fitness-tracker-backend/user/models"
 	"github.com/VibeTeam/fitness-tracker-backend/user/repository"
 )
@@ -23,15 +24,20 @@ func New(repo repository.UserRepository) *UserHandler {
 
 // RegisterRoutes attaches user CRUD endpoints to the supplied Gin router.
 func (h *UserHandler) RegisterRoutes(r *gin.Engine, authMiddleware gin.HandlerFunc) {
-	r.POST("/users", h.create)
-
 	users := r.Group("/users")
-	// users.Use(authMiddleware)
+	usersWithAuth := r.Group("/users")
+
 	{
-		users.GET("/users", h.list)
+		users.GET("", h.list)
 		users.GET("/:id", h.getByID)
+		users.POST("", h.create)
 		users.PUT("/:id", h.update)
 		users.DELETE("/:id", h.delete)
+	}
+
+	usersWithAuth.Use(authMiddleware)
+	{
+		usersWithAuth.GET("/me", h.getMe)
 	}
 }
 
@@ -213,6 +219,32 @@ func (h *UserHandler) delete(c *gin.Context) {
 	}
 
 	c.Status(http.StatusNoContent)
+}
+
+// Get current authenticated user
+// @Summary      Get current user
+// @Description  Returns the authenticated user's information
+// @Tags         users
+// @Produce      json
+// @Success      200  {object}  models.User
+// @Failure      401  {object}  gin.H
+// @Failure      404  {object}  gin.H
+// @Router       /users/me [get]
+// @Security     BearerAuth
+func (h *UserHandler) getMe(c *gin.Context) {
+	userID, ok := middleware.UserID(c)
+	if !ok {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "unauthorized"})
+		return
+	}
+
+	user, err := h.repo.GetByID(c.Request.Context(), userID)
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, userResponse(user))
 }
 
 // helper to shape user JSON response without password hash
