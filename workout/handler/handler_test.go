@@ -46,8 +46,13 @@ func testRouter(t *testing.T) (*gin.Engine, *gorm.DB) {
 	wtHandler := handler.NewWorkoutTypeHandler(wtRepo)
 	wsHandler := handler.NewWorkoutSessionHandler(wsRepo, wdRepo)
 
-	// stub auth: the handlers under test don’t inspect user ID, so no‑op is fine
-	noAuth := func(c *gin.Context) { c.Next() }
+	// stub auth: inject a fixed authenticated user ID for all requests so that
+	// endpoints requiring authorization (e.g., workout-session CRUD) succeed.
+	const testUserID uint = 1
+	noAuth := func(c *gin.Context) {
+		c.Set("user_id", testUserID)
+		c.Next()
+	}
 
 	r := gin.New()
 	mgHandler.RegisterRoutes(r, noAuth)
@@ -205,11 +210,8 @@ func TestWorkoutSessionWithDetails(t *testing.T) {
 	// add a detail row
 	{
 		reqBody := asJSON(t, map[string]any{
-			"detail_name":     "Reps",
-			"detail_value":    "12",
-			"session_id":      ws.ID,
-			"workout_type":    wt.ID,
-			"workout_type_id": wt.ID,
+			"name":  "Reps",
+			"value": "12",
 		})
 		w := httptest.NewRecorder()
 		target := fmt.Sprintf("/workout-sessions/%d/details", ws.ID)
