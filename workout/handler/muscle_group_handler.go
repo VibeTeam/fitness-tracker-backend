@@ -1,4 +1,5 @@
 package handler
+
 import (
 	"net/http"
 	"strconv"
@@ -8,7 +9,6 @@ import (
 	"github.com/VibeTeam/fitness-tracker-backend/workout/models"
 	"github.com/VibeTeam/fitness-tracker-backend/workout/repository"
 )
-// -------- Muscle Groups --------
 
 // MuscleGroupHandler handles CRUD operations for muscle groups.
 type MuscleGroupHandler struct {

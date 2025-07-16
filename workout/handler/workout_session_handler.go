@@ -1,4 +1,5 @@
 package handler
+
 import (
 	"net/http"
 	"strconv"
@@ -10,7 +11,6 @@ import (
 	"github.com/VibeTeam/fitness-tracker-backend/workout/models"
 	"github.com/VibeTeam/fitness-tracker-backend/workout/repository"
 )
-// -------- Workout Sessions --------
 
 type WorkoutSessionHandler struct {
 	repo       repository.WorkoutSessionRepository

@@ -13,7 +13,7 @@ type WorkoutSessionRepository interface {
 	Update(ctx context.Context, session *models.WorkoutSession) error
 	Delete(ctx context.Context, id uint) error
 
-	// List all sessions for a specific user with pagination.
+	// ListByUser lists all sessions for a specific user with pagination.
 	ListByUser(ctx context.Context, userID uint, limit, offset int) ([]*models.WorkoutSession, error)
 	CountByUser(ctx context.Context, userID uint) (int, error)
 }
