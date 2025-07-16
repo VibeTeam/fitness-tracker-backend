@@ -533,6 +533,29 @@ paths:
       summary: Update user
       tags:
         - users
+  /users/me:
+    get:
+      description: Returns the authenticated user's information
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_VibeTeam_fitness-tracker-backend_user_models.User'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/gin.H'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/gin.H'
+      security:
+        - BearerAuth: [ ]
+      summary: Get current user
+      tags:
+        - users
   /workout-sessions:
     get:
       parameters:
