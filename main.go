@@ -15,6 +15,7 @@ import (
 	"os"
 	"time"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -100,6 +101,15 @@ func main() {
 	suggestHandler := workouthandler.NewSuggestHandler(workoutSessionRepo, suggester.New(ollamaURL, modelName))
 
 	router := gin.Default()
+
+	// Configure CORS middleware
+	corsConfig := cors.DefaultConfig()
+	corsConfig.AllowAllOrigins = true
+	corsConfig.AllowMethods = []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"}
+	corsConfig.AllowHeaders = []string{"Origin", "Content-Type", "Accept", "Authorization"}
+	corsConfig.AllowCredentials = true
+	router.Use(cors.New(corsConfig))
+
 	// register routes
 	userHandler.RegisterRoutes(router, authMiddleware)
 	authHandler.RegisterRoutes(router, authMiddleware)
